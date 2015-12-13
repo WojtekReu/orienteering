@@ -9,7 +9,7 @@ class BaseCup(models.Model):
 
 
 class Organizer(BaseCup):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='organizers', related_query_name='organizer')
     web = models.CharField(max_length=128)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
@@ -31,8 +31,9 @@ class Season(BaseCup):
 
 
 class Marathon(BaseCup):
-    organizer = models.ForeignKey(Organizer)
-    season = models.ForeignKey(Season)
+    organizer = models.ForeignKey(Organizer, related_name='marathons',
+                                  related_query_name='marathon')
+    season = models.ForeignKey(Season, related_name='marathons', related_query_name='marathon')
     name = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -44,20 +45,20 @@ class Marathon(BaseCup):
     # position - TODO: add position
 
     def __str__(self):
-        return self.name
+        return self.name.__str__()
 
 
-R_TYPE = {
+R_TYPE = (
     (0, 'TP50'),
     (1, 'TP100'),
     (2, 'TE150'),
     (3, 'TR100'),
-    (4, 'TR200')
-}
+    (4, 'TR200'),
+)
 
 
 class Route(BaseCup):
-    marathon = models.ForeignKey(Marathon)
+    marathon = models.ForeignKey(Marathon, related_name='routes', related_query_name='route')
     r_type = models.PositiveSmallIntegerField(choices=R_TYPE)
     start_time = models.DateTimeField()
     limit_time = models.PositiveSmallIntegerField()
@@ -78,7 +79,7 @@ GENDER = (
 
 
 class Runner(BaseCup):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='runners', related_query_name='runner')
     name = models.CharField(max_length=40)
     surname = models.CharField(max_length=40)
     birth_date = models.DateField()
@@ -95,14 +96,17 @@ class Runner(BaseCup):
 
 
 class Result(BaseCup):
-    runner = models.ForeignKey(Runner)
-    route = models.ForeignKey(Route)
+    runner = models.ForeignKey(Runner, related_name='results', related_query_name='result')
+    route = models.ForeignKey(Route, related_name='results', related_query_name='result')
     r_number = models.PositiveIntegerField(default=None)
     meta_time = models.TimeField()
     total_time = models.TextField()
     pk_points = models.PositiveSmallIntegerField()
     penalty_points = models.PositiveSmallIntegerField()
     points = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return '{} {}'.format(self.runner.__str__(), self.total_time.__str__())
 
     def calc_category(self):
         #TODO: in progress

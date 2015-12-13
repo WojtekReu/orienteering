@@ -1,0 +1,5 @@
+<hr>
+<h2>Sezon: {{ instance.season }}</h2>
+{% for marathon in instance.season.marathons.all %}
+    <div>{{ forloop.counter }}. {{ marathon }} - <b>{{ marathon.organizer.user.first_name }} {{ marathon.organizer.user.last_name }}</b></div>
+{% endfor %}

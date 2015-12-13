@@ -1,7 +1,7 @@
 from django.db import models
 
 from cms.models import CMSPlugin
-from cup.models import Organizer, Marathon
+from cup.models import Organizer, Marathon, Season, Route
 
 
 class CupPlugin(CMSPlugin):
@@ -11,3 +11,10 @@ class CupPlugin(CMSPlugin):
 
     def __str__(self):
         return self.organizer.__str__()
+
+
+class CupCalendar(CMSPlugin):
+    season = models.ForeignKey(Season, verbose_name='Season of Marathon')
+
+    def __str__(self):
+        return self.season.__str__()

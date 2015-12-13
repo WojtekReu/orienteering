@@ -18,3 +18,10 @@ class CupCalendar(CMSPlugin):
 
     def __str__(self):
         return self.season.__str__()
+
+
+class CupOrganizer(CMSPlugin):
+#    organizer = models.ForeignKey(Organizer, verbose_name='Organizer name')
+
+    def __str__(self):
+        return self.organizer.__str__()

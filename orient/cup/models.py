@@ -1,7 +1,10 @@
+from datetime import timedelta, date
+
 from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.timezone import datetime
 
 
 class BaseCup(models.Model):
@@ -11,7 +14,6 @@ class BaseCup(models.Model):
 class Organizer(BaseCup):
     user = models.ForeignKey(User, related_name='organizers', related_query_name='organizer')
     web = models.CharField(max_length=128)
-    email = models.EmailField()
     phone = models.CharField(max_length=15)
     desc = models.TextField(default=None, null=True)
 
@@ -48,54 +50,70 @@ class Marathon(BaseCup):
         return self.name.__str__()
 
 
-R_TYPE = (
-    (0, 'TP50'),
-    (1, 'TP100'),
-    (2, 'TE150'),
-    (3, 'TR100'),
-    (4, 'TR200'),
-)
-
-
 class Route(BaseCup):
+    CATEGORY_TP50 = 'TP50'
+    CATEGORY_TP100 = 'TP100'
+    CATEGORY_TR100 = 'TR100'
+    CATEGORY_TR200 = 'TR200'
+    CATEGORY_CHOICES = (
+        (CATEGORY_TP50, "Trasa Piesza 50 km"),
+        (CATEGORY_TP100, "Trasa Piesza 100 km"),
+        (CATEGORY_TR100, "Trasa Rowerowa 100 km"),
+        (CATEGORY_TR200, "Trasa Rowerowa 200 km"),
+    )
     marathon = models.ForeignKey(Marathon, related_name='routes', related_query_name='route')
-    r_type = models.PositiveSmallIntegerField(choices=R_TYPE)
+    category = models.TextField(max_length=5, choices=CATEGORY_CHOICES)
     start_time = models.DateTimeField()
     limit_time = models.PositiveSmallIntegerField()
     pk_points = models.PositiveSmallIntegerField()
     importance = models.PositiveSmallIntegerField(default=None, null=True) # range (0 - 105)
 
     def __str__(self):
-        r_type_unicode = ''
-        for row in R_TYPE:
-            if row[0] == self.r_type:
-                r_type_unicode = ' ' + row[1]
-        return self.marathon.__str__() + r_type_unicode
-
-GENDER = (
-    (0, 'Male'),
-    (1, 'Female')
-)
+        return "{} {}".format(self.marathon, self.category)
 
 
 class Runner(BaseCup):
+    GENDER_FEMALE = 0
+    GENDER_MALE = 1
+    GENDER_CHOICES = (
+        (GENDER_FEMALE, 'Female'),
+        (GENDER_MALE, 'Male'),
+    )
+    VETERAN_DAYS = 13 * 366 + 47 * 365
     user = models.ForeignKey(User, related_name='runners', related_query_name='runner')
-    name = models.CharField(max_length=40)
-    surname = models.CharField(max_length=40)
     birth_date = models.DateField()
     locality = models.CharField(max_length=60)
-    gender = models.BooleanField(default=None, choices=GENDER)    # True = Female, False = Male
+    gender = models.BooleanField(choices=GENDER_CHOICES)
     blog_url = models.CharField(max_length=255, default=None, null=True)
 
     def __str__(self):
         return self.user.__str__()
 
     def get_actual_category(self):
-        #TODO: in progress
-        return 'M, MW, K, KW'
+        if self.gender == self.GENDER_FEMALE:
+            if date.today() - self.birth_date < timedelta(days=self.VETERAN_DAYS):
+                # TODO: calculate more correctly: by year difference and compare month and day.
+                return 'K'
+            else:
+                return 'KW'
+        if self.gender == self.GENDER_MALE:
+            if date.today() - self.birth_date < timedelta(days=self.VETERAN_DAYS):
+                return 'M'
+            else:
+                return 'MW'
 
 
 class Result(BaseCup):
+    RANKING_K = 'K'
+    RANKING_KW = 'KW'
+    RANKING_M = 'M'
+    RANKING_MW = 'MW'
+    RANKING_CHOICES = (
+        (RANKING_K, 'Women'),
+        (RANKING_KW, 'Veteran Women'),
+        (RANKING_M, 'Men'),
+        (RANKING_MW, 'Veteran Men'),
+    )
     runner = models.ForeignKey(Runner, related_name='results', related_query_name='result')
     route = models.ForeignKey(Route, related_name='results', related_query_name='result')
     r_number = models.PositiveIntegerField(default=None)
@@ -103,14 +121,11 @@ class Result(BaseCup):
     total_time = models.TextField()
     pk_points = models.PositiveSmallIntegerField()
     penalty_points = models.PositiveSmallIntegerField()
+    ranking = models.CharField(max_length=2)
     points = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return '{} {}'.format(self.runner.__str__(), self.total_time.__str__())
-
-    def calc_category(self):
-        #TODO: in progress
-        return 'M, MW, k, KW'
+        return '{} {}'.format(self.runner, self.total_time)
 
 
 class Forum(BaseCup):

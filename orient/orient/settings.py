@@ -74,6 +74,7 @@ STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'orient', 'static'),
+    os.path.join(BASE_DIR, 'cup_plugin', 'static'),
 )
 SITE_ID = 1
 
@@ -209,4 +210,20 @@ DATABASES = {
 
 MIGRATION_MODULES = {
     
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
 }

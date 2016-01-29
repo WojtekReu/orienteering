@@ -1,21 +1,8 @@
 <h2>Registration</h2>
-<form name="registration_form" action="">
+<form id="registration_form" name="registration_form" method="post">
     <ul>
         <li>
-            <label for="username">Nick</label>
-            <input id="username" type="text" name="username"/>
-        </li>
-        <li>
-            <label for="password">Hasło</label>
-            <input id="password" type="password" name="password"/>
-        </li>
-        <li>
-            <label for="password2">Powtórz hasło</label>
-            <input id="password2" type="password" name="password2"/>
-        </li>
-        <li>
-            <label for="email">E-mail</label>
-            <input id="email" type="text" name="email"/>
+            {% csrf_token %}
         </li>
         <li>
             <label for="first_name">Imię</label>
@@ -26,12 +13,36 @@
             <input id="last_name" type="text" name="last_name"/>
         </li>
         <li>
+            <label for="username">Nick</label>
+            <input id="username" type="text" name="username"/>
+        </li>
+        <li>
+            <label for="password">Hasło</label>
+            <input id="password" type="password" name="password"/>
+        </li>
+        <li>
+            <label for="confirm_password">Powtórz hasło</label>
+            <input id="confirm_password" type="password" name="confirm_password"/>
+        </li>
+        <li>
+            <label for="email">E-mail</label>
+            <input id="email" type="text" name="email"/>
+        </li>
+        <li>
             <label for="web">WWW</label>
             <input id="web" type="text" name="web"/>
         </li>
         <li>
+            <label for="phone">Telefon</label>
+            <input id="phone" type="text" name="phone"/>
+        </li>
+        <li>
             <label for="desc">Opis</label>
-            <input id="desc" type="text" name="desc"/>
+            <textarea id="desc" type="text" name="desc"></textarea>
+        </li>
+        <li>
+            <label for="policy">Zgoda na przechowywanie i przetwarzanie danych</label>
+            <input id="policy" type="checkbox" class="checkbox" name="policy"/>
         </li>
         <li>
             <input id="send_form" type="submit" name="send_form" value="Wyślij" />

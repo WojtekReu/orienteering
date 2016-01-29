@@ -36,6 +36,19 @@
             </ul>
             {% block content %}{% endblock content %}
         </div>
+        {% addtoblock "js" %}
+            <script src="{{ STATIC_URL }}djangocms_cup/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+            <script src="{{ STATIC_URL }}djangocms_cup/jquery-validation-1.14.0/dist/jquery.validate.min.js" type="text/javascript"></script>
+            <script src="{{ STATIC_URL }}djangocms_cup/jquery-validation-1.14.0/dist/localization/messages_pl.min.js" type="text/javascript"></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
+            <script type="text/javascript">
+                var url_cup_organizer = "{% url 'cup:organizer' 1 %}";
+                var url_cup_organizer_update = "{% url 'cup:organizer_update' 1 %}";
+                var url_cup_organizer_create = "{% url 'cup:organizer_create' %}";
+            </script>
+            <script src="{{ STATIC_URL }}djangocms_cup/js/custom.js" type="text/javascript"></script>
+        {% endaddtoblock %}
         {% render_block "js" %}
     </body>
 </html>

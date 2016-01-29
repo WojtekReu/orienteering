@@ -5,7 +5,8 @@ from .models import Organizer, Marathon, Result, Runner, Route, Season
 
 class OrganizerAdmin(admin.ModelAdmin):
     list_display = [
-        'user',
+        'first_name',
+        'last_name',
         'web',
     ]
 

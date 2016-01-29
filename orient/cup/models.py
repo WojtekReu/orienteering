@@ -1,6 +1,7 @@
 from datetime import timedelta, date
 
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -11,10 +12,12 @@ class BaseCup(models.Model):
     pass
 
 
-class Organizer(BaseCup):
-    user = models.ForeignKey(User, related_name='organizers', related_query_name='organizer')
-    web = models.CharField(max_length=128)
+class BaseUser(User):
     phone = models.CharField(max_length=15)
+
+
+class Organizer(BaseUser):
+    web = models.CharField(max_length=128)
     desc = models.TextField(default=None, null=True)
 
     class Meta:
@@ -22,7 +25,10 @@ class Organizer(BaseCup):
         verbose_name_plural = _('Organizers')
 
     def __str__(self):
-        return self.user.__str__()
+        return 'Organizer {} {}'.format(self.first_name, self.last_name)
+
+    def get_absolute_url(self):
+        return reverse('cup:organizer', kwargs={'pk': self.pk})
 
 
 class Season(BaseCup):
@@ -41,7 +47,7 @@ class Marathon(BaseCup):
     end_date = models.DateField()
     locality = models.CharField(max_length=60)
     logo_img = models.CharField(max_length=255)     # logo url or path
-    web = models.CharField(max_length=128)
+    web = models.CharField(max_length=128, default=None, null=True)
     desc = models.TextField(default=None, null=True)
     headquarter_address = models.CharField(max_length=255, default=None, null=True)
     # position - TODO: add position
@@ -72,7 +78,7 @@ class Route(BaseCup):
         return "{} {}".format(self.marathon, self.category)
 
 
-class Runner(BaseCup):
+class Runner(BaseUser):
     GENDER_FEMALE = 0
     GENDER_MALE = 1
     GENDER_CHOICES = (
@@ -80,14 +86,13 @@ class Runner(BaseCup):
         (GENDER_MALE, 'Male'),
     )
     VETERAN_DAYS = 13 * 366 + 47 * 365
-    user = models.ForeignKey(User, related_name='runners', related_query_name='runner')
     birth_date = models.DateField()
     locality = models.CharField(max_length=60)
     gender = models.BooleanField(choices=GENDER_CHOICES)
     blog_url = models.CharField(max_length=255, default=None, null=True)
 
     def __str__(self):
-        return self.user.__str__()
+        return 'Runner: {} {}'.format(self.first_name, self.last_name)
 
     def get_actual_category(self):
         if self.gender == self.GENDER_FEMALE:

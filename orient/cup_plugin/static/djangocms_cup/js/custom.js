@@ -45,7 +45,7 @@
                     type: "POST",
                     data: $('#registration_form').serialize(),
                     dataType: 'json',
-                    contentType: 'application/json',
+//                    contentType: 'application/json',
                     beforeSend: function(xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     },
@@ -55,6 +55,8 @@
                     error: function () {
                         console.log('ERROR: something wrong');
                     }
+                }).done(function(data){
+                    console.log('----------' + data + '-------------');
                 });
             } else {
                 console.log('registration organizer invalid');

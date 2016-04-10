@@ -46,11 +46,21 @@ class Marathon(BaseCup):
     start_date = models.DateField()
     end_date = models.DateField()
     locality = models.CharField(max_length=60)
-    logo_img = models.CharField(max_length=255)     # logo url or path
-    web = models.CharField(max_length=128, default=None, null=True)
+    logo_img = models.ImageField()     # logo url or path
+    web = models.URLField(default=None, null=True)
     desc = models.TextField(default=None, null=True)
     headquarter_address = models.CharField(max_length=255, default=None, null=True)
     # position - TODO: add position
+
+    def is_past(self):
+        """
+        Check is it past event by checking finish date.
+        :return: True if marathon is finished.
+        :rtype: bool
+        """
+        if self.end_date < date.today():
+            return True
+        return False
 
     def __str__(self):
         return self.name.__str__()
@@ -85,7 +95,7 @@ class Runner(BaseUser):
         (GENDER_FEMALE, 'Female'),
         (GENDER_MALE, 'Male'),
     )
-    VETERAN_DAYS = 13 * 366 + 47 * 365
+    VETERAN_DAYS = 13 * 366 + 37 * 365
     birth_date = models.DateField()
     locality = models.CharField(max_length=60)
     gender = models.BooleanField(choices=GENDER_CHOICES)

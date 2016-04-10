@@ -4,36 +4,21 @@
     <head>
         <title>{% block title %}This is my new project home page{% endblock title %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <style type="text/css">
-            .nav {
-                padding-left: 0;
-            }
-            .nav li {
-                display: inline;
-                list-style-type: none;
-                padding-right: 20px;
-            }
-            .container {
-                width: 940px;
-                margin: 0 auto
-            }
-            .content {
-                float: left;
-                width: 80%;
-            }
-            .sidebar {
-                float: left;
-                width: 20%;
-            }
-        </style>
+        {% addtoblock "css" %}
+            <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css" type="text/css" media="all">
+        {% endaddtoblock %}
         {% render_block "css" %}
     </head>
     <body>
         {% cms_toolbar %}
         <div class="container">
-            <ul class="nav">
-                {% show_menu 0 100 100 100 %}
-            </ul>
+            <div id="header">
+                <div id="mainmenu">
+                    <ul class="nav">
+                        {% show_menu 0 100 100 100 %}
+                    </ul>
+                </div>
+            </div>
             {% block content %}{% endblock content %}
         </div>
         {% addtoblock "js" %}

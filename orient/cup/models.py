@@ -65,6 +65,14 @@ class Marathon(BaseCup):
     def __str__(self):
         return self.name.__str__()
 
+    def get_export_url(self):
+        """
+        Get url for export results data
+        :return: url for export results
+        :rtype: str
+        """
+        return reverse('get_runners', kwargs={'marathon_pk': self.pk})
+
 
 class Route(BaseCup):
     CATEGORY_TP50 = 'TP50'
@@ -96,7 +104,8 @@ class Runner(BaseUser):
         (GENDER_MALE, 'Male'),
     )
     VETERAN_DAYS = 13 * 366 + 37 * 365
-    birth_date = models.DateField()
+    birth_date = models.DateField(default=None, null=True)
+    birth_year = models.SmallIntegerField(default=None, null=True)
     locality = models.CharField(max_length=60)
     gender = models.BooleanField(choices=GENDER_CHOICES)
     blog_url = models.CharField(max_length=255, default=None, null=True)

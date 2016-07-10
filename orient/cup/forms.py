@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Organizer, Season, Runner
+from .models import Organizer, Season, Runner, Marathon
 
 
 class OrganizerForm(forms.ModelForm):
@@ -13,3 +13,10 @@ class SeasonForm(forms.ModelForm):
     class Meta:
         model = Season
         fields = ['year']
+
+
+class MarathonForm(forms.ModelForm):
+    class Meta:
+        model = Marathon
+        exclude = ()
+

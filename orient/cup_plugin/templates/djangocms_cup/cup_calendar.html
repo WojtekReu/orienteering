@@ -2,12 +2,15 @@
 <div id="tiles">
     {% for marathon in instance.season.marathons.all %}
         <div class="tile{% if marathon.is_past %} past{% endif %}" number="{{ forloop.counter }}">
-            <a href="{{ marathon.web }}">
+{#            <a href="{{ marathon.web }}">#}
+{#            <a href="{% url 'cup:marathon_runners' marathon.pk %}">#}
+            <a href="/en/zawody/#marathon-id={{ marathon.pk }}">
                 <div class="logo"><img src="{{ MEDIA_URL }}{{ marathon.logo_img }}" /></div>
                 <div class="name">{{ marathon }}</div>
                 <div class="locality">{{ marathon.locality }}</div>
-                <div class="date">{{ marathon.start_date }} {{ marathon.is_past }}</div>
+                <div class="date">{{ marathon.start_date }}</div>
             </a>
         </div>
     {% endfor %}
 </div>
+<div class="clear"></div>

@@ -50,6 +50,7 @@ class Marathon(BaseCup):
     web = models.URLField(default=None, null=True)
     desc = models.TextField(default=None, null=True)
     headquarter_address = models.CharField(max_length=255, default=None, null=True)
+    has_results = models.BooleanField(default=False)
     # position - TODO: add position
 
     def is_past(self):
@@ -72,6 +73,12 @@ class Marathon(BaseCup):
         :rtype: str
         """
         return reverse('get_runners', kwargs={'marathon_pk': self.pk})
+
+    @classmethod
+    def get_latest_marathon(cls):
+        return cls.objects.filter(
+            start_date__lte=date.today()
+        ).only('id').order_by('-start_date')[0].id
 
 
 class Route(BaseCup):

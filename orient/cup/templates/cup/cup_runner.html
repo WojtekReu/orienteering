@@ -1,0 +1,42 @@
+{% load i18n %}
+<h1>{{ object.first_name }} {{ object.last_name }}</h1>
+<div class="results_list" number="{{ forloop.counter }}">
+    <table class="results_list">
+        <tr>
+            <th class="name">
+                {% trans 'Marathon' %}
+            </th>
+            <th>
+                {% trans 'Category' %}
+            </th>
+            <th>
+                {% trans 'Number' %}
+            </th>
+            <th>
+                {% trans 'Points' %}
+            </th>
+            <th>
+                {% trans 'Finish time' %}
+            </th>
+        </tr>
+        {% for result in object.results.all %}
+            <tr>
+                <td class="name">
+                    <a href="/zawody/#marathon-id={{ result.route.marathon.pk }}">{{ result.route }}</a>
+                </td>
+                <td>
+                    {{ result.ranking }}
+                </td>
+                <td>
+                    {{ result.r_number }}
+                </td>
+                <td>
+                    {{ result.pk_points }}
+                </td>
+                <td>
+                    {{ result.meta_time }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

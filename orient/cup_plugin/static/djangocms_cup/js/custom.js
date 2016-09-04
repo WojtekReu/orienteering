@@ -64,5 +64,35 @@
             return false;
         });
 
+        if ($('#marathons').length) {
+            if (location.hash == '') {
+                $.ajax({
+                    url: '/en/cup/latestm'
+                }).done(function (data) {
+                    var marathon_id = data.latest_marathon_id;
+                    $.ajax({
+                        url: '/en/cup/marathon/' + marathon_id
+                    }).done(function (data) {
+                        $('#marathons').html(data)
+                    });
+                });
+            } else {
+                var marathon_id = location.hash.match("marathon-id=(.*)")[1];
+                $.ajax({
+                    url: '/en/cup/marathon/' + marathon_id
+                }).done(function (data) {
+                    $('#marathons').html(data)
+                });
+            }
+        }
+
+        if ($('#runner').length) {
+            var runner_id = location.hash.match("runner-id=(.*)")[1];
+            $.ajax({
+                url: '/en/cup/runner/' + runner_id
+            }).done(function(data){
+                $('#runner').html(data)
+            });
+        }
     });
 })();

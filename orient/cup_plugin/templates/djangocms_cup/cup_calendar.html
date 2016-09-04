@@ -1,5 +1,13 @@
-<hr>
-<h2>Sezon: {{ instance.season }}</h2>
-{% for marathon in instance.season.marathons.all %}
-    <div>{{ forloop.counter }}. {{ marathon }} - <b>{{ marathon.organizer.first_name }} {{ marathon.organizer.last_name }}</b></div>
-{% endfor %}
+<h1>Puchar Polski w Pieszych Maratonach na Orientację {{ instance.season }}</h1>
+<div id="tiles">
+    {% for marathon in instance.season.marathons.all %}
+        <div class="tile{% if marathon.is_past %} past{% endif %}" number="{{ forloop.counter }}">
+            <a href="{{ marathon.web }}">
+                <div class="logo"><img src="{{ MEDIA_URL }}{{ marathon.logo_img }}" /></div>
+                <div class="name">{{ marathon }}</div>
+                <div class="locality">{{ marathon.locality }}</div>
+                <div class="date">{{ marathon.start_date }} {{ marathon.is_past }}</div>
+            </a>
+        </div>
+    {% endfor %}
+</div>

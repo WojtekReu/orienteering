@@ -25,3 +25,15 @@ class CupOrganizer(CMSPlugin):
 
     def __str__(self):
         return self.organizer.__str__()
+
+
+class CupMarathon(CMSPlugin):
+
+    def __str__(self):
+        return self.marathon.__str__()
+
+
+class CupRunner(CMSPlugin):
+
+    def __str__(self):
+        return self.runner.__str__()

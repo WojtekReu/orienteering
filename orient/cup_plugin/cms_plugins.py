@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from .models import CupPlugin, CupCalendar, CupOrganizer
+from .models import CupPlugin, CupCalendar, CupOrganizer, CupMarathon
 
 __author__ = 'orkan'
 
@@ -45,3 +45,20 @@ class CMSOrganizerPlugin(CMSPluginBase):
     render_template = "djangocms_cup/cup_organizer.html"
 
 plugin_pool.register_plugin(CMSOrganizerPlugin)
+
+
+class CMSMarathonPlugin(CMSPluginBase):
+#    model = CupMarathon
+    module = _("Cup")
+    name = _("Marathon")
+    render_template = "djangocms_cup/cup_marathon.html"
+
+plugin_pool.register_plugin(CMSMarathonPlugin)
+
+
+class CMSRunnerPlugin(CMSPluginBase):
+    module = _("Cup")
+    name = _("Runner")
+    render_template = "djangocms_cup/cup_runner.html"
+
+plugin_pool.register_plugin(CMSRunnerPlugin)

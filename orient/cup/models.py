@@ -50,6 +50,7 @@ class Marathon(BaseCup):
     web = models.URLField(default=None, null=True)
     desc = models.TextField(default=None, null=True)
     headquarter_address = models.CharField(max_length=255, default=None, null=True)
+    has_results = models.BooleanField(default=False)
     # position - TODO: add position
 
     def is_past(self):
@@ -64,6 +65,20 @@ class Marathon(BaseCup):
 
     def __str__(self):
         return self.name.__str__()
+
+    def get_export_url(self):
+        """
+        Get url for export results data
+        :return: url for export results
+        :rtype: str
+        """
+        return reverse('get_runners', kwargs={'marathon_pk': self.pk})
+
+    @classmethod
+    def get_latest_marathon(cls):
+        return cls.objects.filter(
+            start_date__lte=date.today()
+        ).only('id').order_by('-start_date')[0].id
 
 
 class Route(BaseCup):
@@ -96,7 +111,8 @@ class Runner(BaseUser):
         (GENDER_MALE, 'Male'),
     )
     VETERAN_DAYS = 13 * 366 + 37 * 365
-    birth_date = models.DateField()
+    birth_date = models.DateField(default=None, null=True)
+    birth_year = models.SmallIntegerField(default=None, null=True)
     locality = models.CharField(max_length=60)
     gender = models.BooleanField(choices=GENDER_CHOICES)
     blog_url = models.CharField(max_length=255, default=None, null=True)

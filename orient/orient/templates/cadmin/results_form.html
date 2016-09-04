@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% block content %}
+<h1>{% trans "Results for marathon" %}</h1>
+
+    <div id="out_form_test">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_ul }}
+            <input type="submit" name="send_file" value="{% trans "Send file" %}">
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% load i18n %}
+<h1>{{ object.name }}</h1>
+<div id="results_lists">
+    {% for route in object.routes.all %}
+        <div>
+            <h3 class="header_list">{{ route.category }}</h3>
+            <div class="route_info">
+                {% trans 'Start time:' %} {{ route.start_time }} </br>
+                {% trans 'Limit time:' %} {{ route.limit_time }} </br>
+                {% trans 'PK count:' %} {{ route.pk_points }}
+            </div>
+            <div class="results_list" number="{{ forloop.counter }}">
+                <table class="results_list">
+                    <tr>
+                        <th class="name">
+                            {% trans 'Runner' %}
+                        </th>
+                        <th>
+                            {% trans 'Category' %}
+                        </th>
+                        <th>
+                            {% trans 'Number' %}
+                        </th>
+                        <th>
+                            {% trans 'Points' %}
+                        </th>
+                        <th>
+                            {% trans 'Finish time' %}
+                        </th>
+                    </tr>
+                    {% for result in route.results.all %}
+                        <tr>
+                            <td class="name">
+                                <a href="/en/zawodnik/#runner-id={{ result.runner.pk }}">{{ result.runner.first_name }} {{ result.runner.last_name }}</a>
+                            </td>
+                            <td>
+                                {{ result.ranking }}
+                            </td>
+                            <td>
+                                {{ result.r_number }}
+                            </td>
+                            <td>
+                                {{ result.pk_points }}
+                            </td>
+                            <td>
+                                {{ result.total_time }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.http import JsonResponse
@@ -6,8 +7,9 @@ from django.template.context_processors import csrf
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse
 
-from .models import Organizer, Season
+from .models import Organizer, Season, Marathon, Runner
 from .forms import OrganizerForm, SeasonForm
 
 logger = logging.getLogger(__name__)
@@ -60,3 +62,31 @@ class OrganizerCreateView(generic.CreateView):
         }
 
         return JsonResponse(result, safe=False)
+
+
+class MarathonDetailView(generic.DetailView):
+    model = Marathon
+    template_name = 'cup/cup_marathon.html'
+
+    def get_object(self, queryset=None):
+        """
+        Show marathon results when are prepared
+        :param queryset:
+        :return:
+        """
+        obj = super().get_object(queryset)
+        if obj.has_results:
+            self.template_name = 'cup/cup_marathon_results.html'
+        return obj
+
+
+class RunnerDetailView(generic.DetailView):
+    model = Runner
+    template_name = 'cup/cup_runner.html'
+
+
+def latest_m(request):
+    id = Marathon.get_latest_marathon()
+    response = {'latest_marathon_id': id}
+    return JsonResponse(response, safe=False)
+

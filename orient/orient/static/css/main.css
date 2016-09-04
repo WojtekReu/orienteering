@@ -1,14 +1,22 @@
 body {
-    font-family: 'Arial';
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background: #dddddd;
 }
 h1 {
     text-align: center;
 }
 .container {
     width: 940px;
-    margin: 0 auto
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 700px;
+    padding-bottom: 30px;
+}
+.clear {
+    float: none;
+    clear: both;
 }
 #header {
     background-color: #000;
@@ -48,6 +56,7 @@ h1 {
 .tile {
     float: left;
     margin: 20px;
+    height: 183px;
 }
 .tile .logo {
 
@@ -68,7 +77,48 @@ h1 {
 .tile.past {
     opacity: 0.4;
 }
+.tile .name, .tile .locality, .tile .date {
+    max-width: 110px;
+}
 .sidebar {
     float: left;
     width: 20%;
+}
+.header_list {
+    text-align: center;
+}
+.route_info {
+    font-size: 12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    margin: 10px;
+}
+table.results_list {
+    margin:10px;
+    width: 98%;
+    border-collapse: collapse;
+}
+table.results_list th {
+    border: 1px solid #dddddd;
+}
+table.results_list td {
+    border: 1px solid #dddddd;
+    text-align: center
+}
+table.results_list td.name {
+    text-align: left;
+}
+td.name a {
+    padding-left: 10px;
+    display: block;
+    text-decoration: none;
+    color: #222222;
+}
+
+td.name a:hover {
+    color: #990000;
+}
+table.results_list tr:hover, td.name a:hover {
+    color: #990000;
 }

@@ -7,18 +7,59 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cup', '0002_auto_20151206_2028'),
         ('cms', '0013_urlconfrevision'),
+        ('cup', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
+            name='CupCalendar',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True)),
+                ('season', models.ForeignKey(verbose_name='Season of Marathon', to='cup.Season')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='CupMarathon',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='CupOrganizer',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
             name='CupPlugin',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True, serialize=False)),
+                ('cmsplugin_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True)),
                 ('name', models.CharField(max_length=255, verbose_name='Adnotation')),
-                ('marathon', models.ForeignKey(to='cup.Marathon', verbose_name='Marathon')),
-                ('organizer', models.ForeignKey(to='cup.Organizer', verbose_name='Organizer name')),
+                ('marathon', models.ForeignKey(verbose_name='Marathon', to='cup.Marathon')),
+                ('organizer', models.ForeignKey(verbose_name='Organizer name', to='cup.Organizer')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='CupRunner',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, to='cms.CMSPlugin', parent_link=True)),
             ],
             options={
                 'abstract': False,

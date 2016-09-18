@@ -122,3 +122,26 @@ td.name a:hover {
 table.results_list tr:hover, td.name a:hover {
     color: #990000;
 }
+.cup_form ul {
+    padding: 0;
+}
+.cup_form li {
+    list-style: none;
+}
+.cup_form li label {
+    width: 220px;
+    text-align: right;
+    display: inline-block;
+}
+.checkbox-row input {
+    margin: 0 10px 0 220px;
+}
+.cup_form .checkbox-row label {
+    width: 400px;
+}
+.cup_form .send {
+    text-align: center;
+}
+.response {
+    text-align: center;
+}

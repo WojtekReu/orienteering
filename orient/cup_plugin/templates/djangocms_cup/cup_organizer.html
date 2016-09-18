@@ -1,5 +1,6 @@
-<h2>Registration</h2>
-<form id="registration_form" name="registration_form" method="post">
+{% load i18n %}
+<h1>{% trans 'Organizer registration' %}</h1>
+<form id="registration_form" name="registration_form" method="post" class="cup_form">
     <ul>
         <li>
             {% csrf_token %}
@@ -40,11 +41,11 @@
             <label for="desc">Opis</label>
             <textarea id="desc" type="text" name="desc"></textarea>
         </li>
-        <li>
-            <label for="policy">Zgoda na przechowywanie i przetwarzanie danych</label>
+        <li class="checkbox-row">
             <input id="policy" type="checkbox" class="checkbox" name="policy"/>
+            <label for="policy">Zgoda na przechowywanie i przetwarzanie danych</label>
         </li>
-        <li>
+        <li class="send">
             <input id="send_form" type="submit" name="send_form" value="Wyślij" />
         </li>
     </ul>

@@ -148,12 +148,12 @@ class Result(BaseCup):
     runner = models.ForeignKey(Runner, related_name='results', related_query_name='result')
     route = models.ForeignKey(Route, related_name='results', related_query_name='result')
     r_number = models.PositiveIntegerField(default=None)
-    meta_time = models.TimeField()
-    total_time = models.TextField()
-    pk_points = models.PositiveSmallIntegerField()
-    penalty_points = models.PositiveSmallIntegerField()
-    ranking = models.CharField(max_length=2)
-    points = models.DecimalField(max_digits=6, decimal_places=2)
+    meta_time = models.TimeField(default=None)
+    total_time = models.TextField(default=None)
+    pk_points = models.PositiveSmallIntegerField(default=None)
+    penalty_points = models.PositiveSmallIntegerField(default=None)
+    ranking = models.CharField(max_length=2, default=None)
+    points = models.DecimalField(max_digits=6, decimal_places=2, default=None)
 
     def __str__(self):
         return '{} {}'.format(self.runner, self.total_time)

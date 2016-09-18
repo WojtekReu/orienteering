@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 from django.core.urlresolvers import reverse
 from .forms import LoadResultsForm, LoadRunnersForm
-from cup.models import Runner, Result, Marathon
+from cup.models import Runner, Result, Marathon, Route
 
 
 class LoadRunnersFormView(generic.FormView):
@@ -87,6 +87,7 @@ class LoadResultsFormView(generic.FormView):
         :return:
         """
         results_file = form.files['results_file']
+        marathon = Marathon.objects.get(pk=int(form.cleaned_data['marathon']))
         raw = results_file.read()
         data = raw.decode('utf-8')
 
@@ -116,14 +117,31 @@ class LoadResultsFormView(generic.FormView):
                 })
 
         for nr, result in enumerate(results):
-            result_obj = Result.objects.get(pk=result['result_pk'])
-            # result_obj.route = result['route']  # TODO: get route from type
-            result_obj.r_number = result['r_number']
-            result_obj.meta_time = result['meta_time']
-            result_obj.total_time = result['total_time']
-            result_obj.pk_points = result['pk_points']
-            result_obj.penalty_points = result['penalty_points']
-            result_obj.ranking = result['ranking']  # TODO: prepare check ranking
+            if result['result_pk']:
+                result_obj = Result.objects.get(pk=result['result_pk'])
+                # result_obj.route = result['route']  # TODO: get route from type
+                result_obj.r_number = result['r_number']
+                result_obj.meta_time = result['meta_time']
+                result_obj.total_time = result['total_time']
+                result_obj.pk_points = result['pk_points']
+                result_obj.penalty_points = result['penalty_points']
+                result_obj.ranking = result['ranking']  # TODO: prepare check ranking
+            else:
+                route = Route.objects.filter(
+                    marathon=marathon,
+                    category=result['route']
+                )[0]
+                runner = Runner.objects.filter(
+                    first_name=result['first_name'],
+                    last_name=result['last_name'],
+                    birth_year=result['year'],
+                    locality=result['locality']
+                )[0]
+                result_obj = Result.objects.create(
+                    route=route,
+                    runner=runner,
+                    r_number=result['r_number'],
+                )
             result_obj.save()
 
         response = 'Results Updated: {}'.format(len(results))

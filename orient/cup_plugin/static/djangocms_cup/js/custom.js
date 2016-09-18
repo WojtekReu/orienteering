@@ -50,7 +50,7 @@
                         xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     },
                     success: function (data) {
-                        console.log('Organizer create response: ' + JSON.stringify(data));
+                        $('#registration_form').html('<div class="response">Organizator ' + data.first_name + ' ' + data.last_name + ' został utworzony.</div>');
                     },
                     error: function () {
                         console.log('ERROR: something wrong');
